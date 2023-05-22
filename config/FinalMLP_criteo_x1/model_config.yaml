@@ -1,0 +1,34 @@
+base:
+    model_name: FinalMLP
+    batch_size: 4096
+    early_stop_patience: 2
+    embedding_dim: 10
+    embedding_regularizer: 1.0e-05
+    net_regularizer: 0
+    epochs: 100
+    eval_epoch: null
+    fs_hidden_units: [800]
+    learning_rate: 0.001
+    loss: binary_crossentropy
+    metrics: [AUC, logloss]
+    mlp1_batch_norm: true
+    mlp1_dropout: 0.2
+    mlp1_hidden_activations: relu
+    mlp1_hidden_units: [400, 400, 400]
+    mlp2_batch_norm: true
+    mlp2_dropout: 0.3
+    mlp2_hidden_activations: relu
+    mlp2_hidden_units: [1000]
+    model_root: ./models/FinalMLP/FinalMLP.py
+    monitor: AUC
+    monitor_mode: max
+    num_heads: 200
+    num_workers: 8
+    optimizer: adam
+    ordered_features: null
+    pickle_feature_encoder: true
+    save_best_only: true
+    shuffle: true
+    task: binary_classification
+    use_fs: true
+    verbose: 0

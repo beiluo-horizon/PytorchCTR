@@ -1,0 +1,22 @@
+base:
+    model_name: GateNet
+    batch_size: 4096
+    early_stop_patience: 2
+    embedding_dim: 10
+    embedding_regularizer: 1.0e-05
+    net_regularizer: 0
+    epochs: 100
+    eval_epoch: 2
+    learning_rate: 0.0004
+    loss: binary_crossentropy
+    batch_normal: true
+    gate_batch_normal : False
+    dropout: 0.1
+    linear_dropout: 0.0
+    gate_dropout: 0.0
+    hidden_activations: relu
+    hidden_units: [400, 400, 400]
+    optimizer: adam
+    num_workers: 8
+    num_layers : 3
+    use_linear: True

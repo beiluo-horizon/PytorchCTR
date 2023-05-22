@@ -1,0 +1,20 @@
+base:
+    model_name: DCN
+    batch_size: 4096
+    early_stop_patience: 2
+    embedding_dim: 10
+    embedding_regularizer: 1.0e-05
+    net_regularizer: 0
+    epochs: 100
+    eval_epoch: 2
+    fs_hidden_units: [800]
+    learning_rate: 0.001
+    loss: binary_crossentropy
+    batch_normal: true
+    dropout: 0.0
+    linear_dropout: 0.0
+    hidden_activations: relu
+    hidden_units: [400, 400, 400]
+    optimizer: adam
+    num_workers: 16
+    dcn_layers: 3
