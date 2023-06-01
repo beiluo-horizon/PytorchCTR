@@ -1,0 +1,75 @@
+import torch
+import torch.nn as nn
+from .basemodel import BaseModel
+from .layers.base_mlp import MLP
+from.layers.base_liner import Linear
+from .layers.base_cin import CIN
+
+class xDeepFM(BaseModel):
+
+    def __init__(self, fix_SparseFeat, fix_DenseFeat,args):
+        super(xDeepFM, self).__init__(fix_SparseFeat, fix_DenseFeat,args)
+
+        _ = self.get_input_dim()
+        _ = self.get_field_index()
+
+        if args.model_params['loss'] == 'binary_crossentropy':
+            self.pediction_layer = nn.Sequential(
+                nn.Sigmoid()
+            )
+        self.add_regularization_net_weight(self.pediction_layer.parameters())
+
+        self.dnn = MLP(self.input_dim, 
+                        args.model_params['hidden_units'],
+                        dropout=args.model_params['dropout'], 
+                        batchnorm=args.model_params['batch_normal'], 
+                        activation=args.model_params['hidden_activations'],
+                        use_bias=False)
+        self.dnn_linear = nn.Linear(args.model_params['hidden_units'][-1], 1, bias=False)
+        nn.init.xavier_normal_(self.dnn_linear.weight)
+        self.add_regularization_net_weight(self.dnn.parameters())
+        self.add_regularization_net_weight(self.dnn_linear.parameters())
+        
+
+        self.linear = Linear(
+            self.input_dim,
+            dropout=args.model_params['linear_dropout'],
+            use_bias=True
+        )
+
+        self.add_regularization_net_weight(self.linear.parameters())
+
+        self.cin = CIN(
+            args,
+            len(self.field_index)
+        )
+        if args.model_params['split_half'] == True:
+            self.featuremap_num = sum(
+                args.model_params['cin_layer_size'][:-1]) // 2 + args.model_params['cin_layer_size'][-1]
+        else:
+            self.featuremap_num = sum(args.model_params['cin_layer_size'])
+        self.cin_linear = nn.Linear(self.featuremap_num, 1, bias=False)
+        nn.init.xavier_normal_(self.cin_linear.weight)
+        self.add_regularization_net_weight(self.cin.parameters())
+        self.add_regularization_net_weight(self.cin_linear.parameters())
+
+    def forward(self, x):
+        
+        sparse_dict,dense_dict = self.get_embeddings(x)
+        all_emb = [values for res,values in sparse_dict.items()]
+        all_emb += [values for res,values in dense_dict.items()]
+        all_emb = torch.cat(all_emb,dim=-1)
+
+        fm_emb = [values.unsqueeze(1) for res,values in sparse_dict.items()]
+        fm_emb = torch.cat(fm_emb,dim=1)
+
+        linear_logit = self.linear(all_emb)
+        cin_logit = self.cin(fm_emb)
+        cin_logit = self.cin_linear(cin_logit)
+        dnn_logit = self.dnn(all_emb)
+        dnn_logit = self.dnn_linear(dnn_logit)
+
+        logit = linear_logit + dnn_logit + cin_logit
+        y_pred = self.pediction_layer(logit)
+        reg_loss = self.get_regularization_loss()
+        return y_pred,reg_loss
