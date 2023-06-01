@@ -43,20 +43,26 @@ Possible reasons for code bugs or inconsistent data
 运行流程   running process
 
 第一步     step1
+
 数据准备   prepare training data
 
+```python
 $ cd data/criteo
 $ python download_criteo_x1.py
 $ python trans.py (please modify the path accordingly)
-
+```
 
 第二步     step2
+
 提前在config中配置好需要的模型和参数   Configure the required models and parameters in advance in config
 
 
 第三步     step3
+
 在main.py中配置模型设置和参数设置   configure model and parameter settings in main.py
+
 以FinalMLP为例      Taking FinalMLP as an example
 
+```python
 $ python mian.py --config_dir='./config/FinalMLP_criteo_x1' --model_setid='base' data_setid='base' gpu_index=0 expid='v1'
-
+```
