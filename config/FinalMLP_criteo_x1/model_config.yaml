@@ -1,0 +1,21 @@
+base:
+    model_name: FinalMLP
+    batch_size: 1024
+    early_stop_patience: 2
+    embedding_dim: 10
+    embedding_regularizer: 1.0e-05
+    net_regularizer: 1.0e-05
+    epochs: 100
+    eval_epoch: 2
+    learning_rate: 0.0001
+    loss: binary_crossentropy
+    batch_normal: true
+    dropout: 0.2
+    hidden_activations: relu
+    hidden_units: [400, 400, 400]
+    feature_select_hidden_units: [1200]
+    feature_select_batch_normal: False
+    num_heads: 10
+    num_workers: 8
+    optimizer: adam
+    use_linear: False

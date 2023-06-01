@@ -1,0 +1,23 @@
+base:
+    model_name: FiBiNetPlus
+    batch_size: 1024
+    early_stop_patience: 2
+    embedding_dim: 10
+    embedding_regularizer: 1.0e-05
+    net_regularizer: 1.0e-05
+    epochs: 100
+    eval_epoch: 2
+    learning_rate: 1.0e-4
+    loss: binary_crossentropy
+    batch_normal: true
+    dropout: 0.5
+    linear_dropout: 0.0
+    hidden_activations: relu
+    hidden_units: [400, 400, 400]
+    optimizer: adam
+    num_workers: 2
+    bilinear_type: interaction
+    use_linear: True
+    num_group: 2
+    reduction_ratio: 3
+    bi_mlp_dim: 50
