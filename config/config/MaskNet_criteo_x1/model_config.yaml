@@ -1,0 +1,24 @@
+base:
+    model_name: MaskNet
+    batch_size: 1024
+    early_stop_patience: 2
+    embedding_dim: 10
+    embedding_regularizer: 1.0e-05
+    net_regularizer: 1.0e-05
+    epochs: 100
+    eval_epoch: 2
+    learning_rate: 0.0001
+    loss: binary_crossentropy
+    batch_normal: true
+    dropout: 0.5
+    hidden_units: [400, 400, 400]
+    hidden_activations: relu
+    optimizer: adam
+    linear_dropout : 0.0
+    num_workers: 16
+    net_model: parallel
+    use_linear: True
+    increase_ratio: 2
+    block_num: 3
+    use_linear: False
+
